@@ -1,0 +1,917 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>API Reference</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight .gh {
+  color: #999999;
+}
+.highlight .sr {
+  color: #f6aa11;
+}
+.highlight .go {
+  color: #888888;
+}
+.highlight .gp {
+  color: #555555;
+}
+.highlight .gs {
+}
+.highlight .gu {
+  color: #aaaaaa;
+}
+.highlight .nb {
+  color: #f6aa11;
+}
+.highlight .cm {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #75715e;
+}
+.highlight .c1 {
+  color: #75715e;
+}
+.highlight .cs {
+  color: #75715e;
+}
+.highlight .c, .highlight .cd {
+  color: #75715e;
+}
+.highlight .err {
+  color: #960050;
+}
+.highlight .gr {
+  color: #960050;
+}
+.highlight .gt {
+  color: #960050;
+}
+.highlight .gd {
+  color: #49483e;
+}
+.highlight .gi {
+  color: #49483e;
+}
+.highlight .ge {
+  color: #49483e;
+}
+.highlight .kc {
+  color: #66d9ef;
+}
+.highlight .kd {
+  color: #66d9ef;
+}
+.highlight .kr {
+  color: #66d9ef;
+}
+.highlight .no {
+  color: #66d9ef;
+}
+.highlight .kt {
+  color: #66d9ef;
+}
+.highlight .mf {
+  color: #ae81ff;
+}
+.highlight .mh {
+  color: #ae81ff;
+}
+.highlight .il {
+  color: #ae81ff;
+}
+.highlight .mi {
+  color: #ae81ff;
+}
+.highlight .mo {
+  color: #ae81ff;
+}
+.highlight .m, .highlight .mb, .highlight .mx {
+  color: #ae81ff;
+}
+.highlight .sc {
+  color: #ae81ff;
+}
+.highlight .se {
+  color: #ae81ff;
+}
+.highlight .ss {
+  color: #ae81ff;
+}
+.highlight .sd {
+  color: #e6db74;
+}
+.highlight .s2 {
+  color: #e6db74;
+}
+.highlight .sb {
+  color: #e6db74;
+}
+.highlight .sh {
+  color: #e6db74;
+}
+.highlight .si {
+  color: #e6db74;
+}
+.highlight .sx {
+  color: #e6db74;
+}
+.highlight .s1 {
+  color: #e6db74;
+}
+.highlight .s {
+  color: #e6db74;
+}
+.highlight .na {
+  color: #a6e22e;
+}
+.highlight .nc {
+  color: #a6e22e;
+}
+.highlight .nd {
+  color: #a6e22e;
+}
+.highlight .ne {
+  color: #a6e22e;
+}
+.highlight .nf {
+  color: #a6e22e;
+}
+.highlight .vc {
+  color: #ffffff;
+}
+.highlight .nn {
+  color: #ffffff;
+}
+.highlight .nl {
+  color: #ffffff;
+}
+.highlight .ni {
+  color: #ffffff;
+}
+.highlight .bp {
+  color: #ffffff;
+}
+.highlight .vg {
+  color: #ffffff;
+}
+.highlight .vi {
+  color: #ffffff;
+}
+.highlight .nv {
+  color: #ffffff;
+}
+.highlight .w {
+  color: #ffffff;
+}
+.highlight {
+  color: #ffffff;
+}
+.highlight .n, .highlight .py, .highlight .nx {
+  color: #ffffff;
+}
+.highlight .ow {
+  color: #f92672;
+}
+.highlight .nt {
+  color: #f92672;
+}
+.highlight .k, .highlight .kv {
+  color: #f92672;
+}
+.highlight .kn {
+  color: #f92672;
+}
+.highlight .kp {
+  color: #f92672;
+}
+.highlight .o {
+  color: #f92672;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="index" data-languages="[&quot;shell&quot;,&quot;go&quot;,&quot;javascript&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" alt="Navbar" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" style="width: 60%; margin: 20px auto 5px auto" alt="Logo" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="shell">cURL</a>
+              <a href="#" data-language-name="go">go</a>
+              <a href="#" data-language-name="javascript">jQuery</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc">
+      </div>
+        <ul class="toc-footer">
+            <li><a href='#'>Sign Up for a Developer Key</a></li>
+            <li><a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id="introduction">Introduction</h1>
+
+<p>Welcome to the ETH Process API! This documentation covers everything you need to know about accepting ethereum for your application. You&rsquo;ll be able to create orders, retrieve order information, and get your account history.</p>
+
+<p>ETH Process has a pretty basic transaction system.</p>
+
+<ol>
+<li>Application creates new order for customer</li>
+<li>Customer pays QR code Ethereum address</li>
+<li>Successful alert for customer letting them know they paid. (expires in 15 minutes)</li>
+<li>Application receives a POST to callback URL of order information and transaction ID.</li>
+<li>ETH Process waits for 12 confirmations then sends entire wallet balance to your Ethereum address.</li>
+<li>Another POST request to your application&rsquo;s callback URL.</li>
+</ol>
+
+<p>We have language bindings in cURL, Golang, and in jQuery. You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
+
+<p>ETH Process is currently in the process of making the transaction callback process a seamless and transparent process. The plan is to have the customer pay directly to ETH Process Contract with data to include your Ethereum address, order ID and callback information. Once you&rsquo;ve collected your funds into your account inside of the contract, you&rsquo;ll be able to withdraw directly from contract, thus reducing the transaction fee each time a payment is transmitted.</p>
+
+<h3 id="production-api-endpoint-ethereum-blockchain-eth">Production API Endpoint (Ethereum Blockchain ETH)</h3>
+
+<p><code class="prettyprint">https://api.ethereumpos.com</code></p>
+
+<h3 id="testing-api-endpoint-ethereum-ropsten-testnet">Testing API Endpoint (Ethereum Ropsten Testnet)</h3>
+
+<p><code class="prettyprint">https://testapi.ethereumpos.com</code></p>
+
+<h1 id="authentication">Authentication</h1>
+
+<blockquote>
+<p>Currently ETH Process does not require Authentication for amount under $5.00 USD.</p>
+</blockquote>
+
+<p>ETH Process uses API keys to allow access to the API. You can register a new ETH Process API key at our <a href="http://example.com/register">developer portal</a>.</p>
+
+<p>ETH Process expects for the API key to be included in all requests over $5.00 USD. API requests to the server in a header that looks like the following:</p>
+
+<p><code class="prettyprint">Authorization: MYKEYHERE</code></p>
+
+<aside class="notice">
+You must replace <code>MYKEYHERE</code> with your personal API key.
+</aside>
+
+<h1 id="orders">Orders</h1>
+
+<h2 id="create-new-order">Create New Order</h2>
+<pre class="highlight shell tab-shell"><code>curl -X POST -H <span class="s2">"Content-Type: application/json"</span> -d <span class="s1">'{
+    "amount": "13.54",
+    "address": "0x3f05dc64b34f5063461f81d88972a3f542f57331",
+    "callback": "http://domain.com"
+}'</span> <span class="s2">"https://api.ethereumpos.com/order"</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">NOT</span><span class="x"> </span><span class="n">complete</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">716101402</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1679548078de9a5a9129d75719b5e442abd5b2e5"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"expected_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.4173"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usd"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"currency_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"payment_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://ethereumpos.com/test_payment/716101402"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"eth_price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"69.98"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"qr_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://chart.apis.google.com/chart?cht=qr&amp;chs=500x500&amp;chl=ethereum%3A0x1679548078de9a5a9129d75719b5e442abd5b2e5&amp;chld=H|0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"transaction_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"sent_transaction"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0001-01-01T00:00:00Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"return_to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x888a5fEFAA912778FdBf8eC222F299e96057c43b"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"paid"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"expired"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint creates NEW ORDERS for your customers to send money to.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST https://api.ethereumpos.com/order</code></p>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>amount</td>
+<td>true</td>
+<td>If set to true, the result will also include cats.</td>
+</tr>
+<tr>
+<td>address</td>
+<td>true</td>
+<td>If set to true, the result will also include cats.</td>
+</tr>
+<tr>
+<td>callback</td>
+<td>true</td>
+<td>If set to true, the result will also include cats.</td>
+</tr>
+<tr>
+<td>item_title</td>
+<td>false</td>
+<td>If set to true, the result will also include cats.</td>
+</tr>
+<tr>
+<td>item_description</td>
+<td>false</td>
+<td>If set to true, the result will also include cats.</td>
+</tr>
+<tr>
+<td>item_image</td>
+<td>false</td>
+<td>If set to true, the result will also include cats.</td>
+</tr>
+</tbody></table>
+
+<h3 id="response-parameters">Response Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>400</td>
+<td>Bad Request &ndash; Your request sucks</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized &ndash; Your API key is wrong</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden &ndash; The kitten requested is hidden for administrators only</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; The specified kitten could not be found</td>
+</tr>
+<tr>
+<td>405</td>
+<td>Method Not Allowed &ndash; You tried to access a kitten with an invalid method</td>
+</tr>
+<tr>
+<td>406</td>
+<td>Not Acceptable &ndash; You requested a format that isn&rsquo;t json</td>
+</tr>
+<tr>
+<td>410</td>
+<td>Gone &ndash; The kitten requested has been removed from our servers</td>
+</tr>
+<tr>
+<td>418</td>
+<td>I&rsquo;m a teapot</td>
+</tr>
+<tr>
+<td>429</td>
+<td>Too Many Requests &ndash; You&rsquo;re requesting too many kittens! Slow down!</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error &ndash; We had a problem with our server. Try again later.</td>
+</tr>
+<tr>
+<td>503</td>
+<td>Service Unavailable &ndash; We&rsquo;re temporarily offline for maintenance. Please try again later.</td>
+</tr>
+</tbody></table>
+
+<h2 id="get-order-information">Get Order Information</h2>
+<pre class="highlight shell tab-shell"><code>curl -X GET <span class="s2">"https://api.ethereumpos.com/order/&lt;ID&gt;"</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">yoyoyooyoyoyoyo</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">716101402</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1679548078de9a5a9129d75719b5e442abd5b2e5"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"expected_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.4173"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usd"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"currency_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"29.20"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"payment_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://ethereumpos.com/test_payment/716101402"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"complete"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"eth_price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"69.98"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"qr_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://chart.apis.google.com/chart?cht=qr&amp;chs=500x500&amp;chl=ethereum%3A0x1679548078de9a5a9129d75719b5e442abd5b2e5&amp;chld=H|0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"transaction_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x8586aebc2ae317388955f4cbf073aa736e8fe440aca7eec90f3bfe303e59abd6"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"sent_transaction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x4746935c2b001f45d8c907e2bb425106411e03d8afc8940b47298a099509f48c"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0001-01-01T00:00:00Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"return_to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x888a5fEFAA912778FdBf8eC222F299e96057c43b"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"paid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"expired"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint retrieves order information</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">GET https://api.ethereumpos.com/order/&lt;ID&gt;</code></p>
+
+<h3 id="url-parameters">URL Parameters</h3>
+
+<h1 id="history">History</h1>
+
+<h2 id="show-all-orders">Show All Orders</h2>
+<pre class="highlight shell tab-shell"><code>curl -X GET <span class="s2">"https://api.ethereumpos.com/history"</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">yoyoyooyoyoyoyo</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"orders"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">716101419</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x2524e3c29bd8ed8a16344ae0da27898dbef08511"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"expected_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.2281"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usd"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"currency_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"16.00"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"complete"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"eth_price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"70.15"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"qr_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"transaction_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x8403bcf744da5862eef5d3dd2fef951b06a582938e4848940bf0e87889d09012"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"sent_transaction"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0001-01-01T00:00:00Z"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"return_to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x888a5fEFAA912778FdBf8eC222F299e96057c43b"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"paid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"expired"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint retrieves order information</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">GET https://api.ethereumpos.com/history</code></p>
+
+<h2 id="show-orders-with-status">Show Orders with Status</h2>
+<pre class="highlight shell tab-shell"><code>curl -X GET <span class="s2">"https://api.ethereumpos.com/history/&lt;METHOD&gt;"</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">yoyoyooyoyoyoyo</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"orders"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">716101419</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x2524e3c29bd8ed8a16344ae0da27898dbef08511"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"expected_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.2281"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usd"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"currency_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"16.00"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"complete"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"eth_price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"70.15"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"qr_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"transaction_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x8403bcf744da5862eef5d3dd2fef951b06a582938e4848940bf0e87889d09012"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"sent_transaction"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0001-01-01T00:00:00Z"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"return_to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x888a5fEFAA912778FdBf8eC222F299e96057c43b"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"paid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"expired"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint retrieves order information</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">GET https://api.ethereumpos.com/history/&lt;METHOD&gt;</code></p>
+
+<h3 id="url-parameters">URL Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>METHOD</td>
+<td>pending,success,complete,expired,refunded</td>
+</tr>
+</tbody></table>
+
+<table><thead>
+<tr>
+<th>Method Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>pending</td>
+<td>Customer has not sent this transaction yet.</td>
+</tr>
+<tr>
+<td>success</td>
+<td>Customer has sent the correct amount and has at least 1 confirmation</td>
+</tr>
+<tr>
+<td>complete</td>
+<td>ETH Process sent the entire wallet balance to the creators Ethereum address</td>
+</tr>
+<tr>
+<td>expired</td>
+<td>Customer didn&rsquo;t send the transaction within 15 minutes. This can also happen if customer sent a low transaction fee.</td>
+</tr>
+<tr>
+<td>refunded</td>
+<td>Merchant has successfully refunded the customer</td>
+</tr>
+</tbody></table>
+
+<h2 id="recurring-billing-status">Recurring Billing Status</h2>
+<pre class="highlight shell tab-shell"><code>curl -X GET <span class="s2">"https://api.ethereumpos.com/status/recurring/&lt;METHOD&gt;"</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">yoyoyooyoyoyoyo</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x5be4c1b30534a6a30bf9f68ad6d3c0dc2a7fe292"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"confirmations"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usd"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"currency_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.30"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"expected_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.0681"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"payment_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://ethereumpos.com/payment/14"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"paid"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"paid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"eth_price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"48.45"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"qr_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://chart.apis.google.com/chart?cht=qr&amp;chs=500x500&amp;chl=ethereum%3A0x5be4c1b30534a6a30bf9f68ad6d3c0dc2a7fe292&amp;chld=H|0"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"transaction_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"item_title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"New Item"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"item_description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Description"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"item_image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://ethereumpos.com/images/ethereum.svg"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0001-01-01T00:00:00Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint retrieves orders attached to recurring billing</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">GET https://api.ethereumpos.com/status/recurring/&lt;METHOD&gt;</code></p>
+
+<h3 id="url-parameters">URL Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>METHOD</td>
+<td>expired,active,pending,upcoming</td>
+</tr>
+</tbody></table>
+
+<table><thead>
+<tr>
+<th>Method Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>expired</td>
+<td>Customer did not continue with the recurring payment, more than 10 days late.</td>
+</tr>
+<tr>
+<td>active</td>
+<td>Customer has paid in full till the end timestamp.</td>
+</tr>
+<tr>
+<td>pending</td>
+<td>Customer has not paid for the payment yet and is less then 10 days late.</td>
+</tr>
+<tr>
+<td>upcoming</td>
+<td>Customers recurring payments upcoming in next 10 days</td>
+</tr>
+</tbody></table>
+
+<h1 id="user-information">User Information</h1>
+
+<h2 id="show-account-information">Show Account Information</h2>
+<pre class="highlight shell tab-shell"><code>curl -X GET <span class="s2">"https://api.ethereumpos.com/user"</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">yoyoyooyoyoyoyo</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x5be4c1b30534a6a30bf9f68ad6d3c0dc2a7fe292"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"confirmations"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usd"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"currency_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.30"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"expected_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.0681"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"payment_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://ethereumpos.com/payment/14"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"paid"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"paid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"eth_price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"48.45"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"qr_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://chart.apis.google.com/chart?cht=qr&amp;chs=500x500&amp;chl=ethereum%3A0x5be4c1b30534a6a30bf9f68ad6d3c0dc2a7fe292&amp;chld=H|0"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"transaction_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"item_title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"New Item"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"item_description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Description"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"item_image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://ethereumpos.com/images/ethereum.svg"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0001-01-01T00:00:00Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint retrieves information about the merchant/developer account.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">GET https://api.ethereumpos.com/user</code></p>
+
+<table><thead>
+<tr>
+<th>Method Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>pending</td>
+<td>Customer has not sent this transaction yet.</td>
+</tr>
+<tr>
+<td>success</td>
+<td>Customer has sent the correct amount and has at least 1 confirmation</td>
+</tr>
+<tr>
+<td>complete</td>
+<td>ETH Process sent the entire wallet balance to the creators Ethereum address</td>
+</tr>
+<tr>
+<td>expired</td>
+<td>Customer didn&rsquo;t send the transaction within 15 minutes. This can also happen if customer sent a low transaction fee.</td>
+</tr>
+</tbody></table>
+
+<h2 id="account-balance-and-history">Account Balance and History</h2>
+<pre class="highlight shell tab-shell"><code>curl -X GET <span class="s2">"https://api.ethereumpos.com/user/history"</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">yoyoyooyoyoyoyo</span><span class="x">
+</span></code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x5be4c1b30534a6a30bf9f68ad6d3c0dc2a7fe292"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"confirmations"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usd"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"currency_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.30"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"expected_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.0681"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"payment_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://ethereumpos.com/payment/14"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"paid"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"paid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"eth_price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"48.45"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"qr_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://chart.apis.google.com/chart?cht=qr&amp;chs=500x500&amp;chl=ethereum%3A0x5be4c1b30534a6a30bf9f68ad6d3c0dc2a7fe292&amp;chld=H|0"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"transaction_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"item_title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"New Item"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"item_description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Description"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"item_image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://ethereumpos.com/images/ethereum.svg"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0001-01-01T00:00:00Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint retrieves information about the merchant/developer total income, outgoing, total transactions, etc.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">GET https://api.ethereumpos.com/user/history</code></p>
+
+<table><thead>
+<tr>
+<th>Method Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>pending</td>
+<td>Customer has not sent this transaction yet.</td>
+</tr>
+<tr>
+<td>success</td>
+<td>Customer has sent the correct amount and has at least 1 confirmation</td>
+</tr>
+<tr>
+<td>complete</td>
+<td>ETH Process sent the entire wallet balance to the creators Ethereum address</td>
+</tr>
+<tr>
+<td>expired</td>
+<td>Customer didn&rsquo;t send the transaction within 15 minutes. This can also happen if customer sent a low transaction fee.</td>
+</tr>
+</tbody></table>
+
+<h1 id="pricing-and-fees">Pricing and Fees</h1>
+
+<h2 id="memberships">Memberships</h2>
+
+<p>ETH Processing has simple the understand billing</p>
+
+<h3 id="monthly-plans">Monthly Plans</h3>
+
+<table><thead>
+<tr>
+<th>Plan</th>
+<th>Monthly Price</th>
+<th>Daily Transactions</th>
+<th>Max Amount (USD)</th>
+<th>Recurring Payments</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Free</td>
+<td>$0.00</td>
+<td>10</td>
+<td>$10.00</td>
+<td>no</td>
+</tr>
+<tr>
+<td>Basic</td>
+<td>$5.00</td>
+<td>25</td>
+<td>$30.00</td>
+<td>no</td>
+</tr>
+<tr>
+<td>Seller</td>
+<td>$12.00</td>
+<td>50</td>
+<td>$100.00</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>$20.00</td>
+<td>150</td>
+<td>$500.00</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Exclusive</td>
+<td>contact us</td>
+<td>500+</td>
+<td>$1000.00</td>
+<td>yes</td>
+</tr>
+</tbody></table>
+
+<h3 id="plugin-features">Plugin Features</h3>
+
+<table><thead>
+<tr>
+<th>Plugin</th>
+<th>Monthly Price</th>
+<th>Max Amount</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>TXT Messaging 150</td>
+<td>$5.00</td>
+<td>150</td>
+</tr>
+<tr>
+<td>TXT Messaging 500</td>
+<td>$10.00</td>
+<td>500</td>
+</tr>
+<tr>
+<td>Recurring Payments</td>
+<td>$10.00</td>
+<td>500</td>
+</tr>
+</tbody></table>
+
+<h4 id="text-messaging">Text Messaging</h4>
+
+<p>This ETH Process plugin feature is great for applications that would like to text the user or developer of recent payment activity.</p>
+
+<h5 id="recurring-payments">Recurring Payments</h5>
+
+<p>Give your customers the ability to pay monthly with a dedicated QR code.</p>
+
+<h2 id="free-membership-limits">Free Membership Limits</h2>
+
+<p>ETH Process provides free transaction forwarding with amounts under $10.00.</p>
+
+<h2 id="ethereum-fees">Ethereum Fees</h2>
+
+<p>When the customer first submits the transaction, they will be forced to pay for the transaction fee which is around $0.02 USD. Once ETH Process has at least 12 confirmations on the customers transaction, the entire balance of the wallet will be sent to your Ethereum address that you inserted on the /new request.</p>
+
+<p>For example, a customer sends $10.00. Most likely, the customer wallet will send around $10.02 to the ETH Process wallet. The ETH Process wallet will only receive $10.00 because of the $0.02 transaction fee. Once theres 12+ confirmation, ETH Process will send the entire wallet balance to your Ethereum address. You&rsquo;ll receive around $9.98, since the $0.02 transaction fee has been included.</p>
+
+<aside class="notice">
+ETH Process does not take any Ethereum or gas during this transaction process.
+</aside>
+
+<h1 id="contract-information">Contract Information</h1>
+
+<p>ETH Process is currently in the process of making the transaction callback process a seamless and transparent process. The plan is to have the customer pay directly to ETH Process Contract with data to include your Ethereum address, order ID and callback information. Once you&rsquo;ve collected your funds into your account inside of the contract, you&rsquo;ll be able to withdraw directly from contract, thus reducing the transaction fee each time a payment is transmitted.</p>
+
+<ol>
+<li>Customer pays Etheruem address QR code</li>
+<li>ETH Process sends entire balance with order data to ETH Process contract.</li>
+<li>Merchant/Developer can hold funds inside of the contract and withdraw when requested. (sending a call to contract from requesting address)</li>
+</ol>
+
+          <h1 id="errors">Errors</h1>
+
+<aside class="notice">This error section is stored in a separate file in `includes/_errors.md`. Slate allows you to optionally separate out your docs into many files&hellip;just save them to the `includes` folder and add them to the top of your `index.md`&lsquo;s frontmatter. Files are included in the order listed.</aside>
+
+<p>The Kittn API uses the following error codes:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>400</td>
+<td>Bad Request &ndash; Your request sucks</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized &ndash; Your API key is wrong</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden &ndash; The kitten requested is hidden for administrators only</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; The specified kitten could not be found</td>
+</tr>
+<tr>
+<td>405</td>
+<td>Method Not Allowed &ndash; You tried to access a kitten with an invalid method</td>
+</tr>
+<tr>
+<td>406</td>
+<td>Not Acceptable &ndash; You requested a format that isn&rsquo;t json</td>
+</tr>
+<tr>
+<td>410</td>
+<td>Gone &ndash; The kitten requested has been removed from our servers</td>
+</tr>
+<tr>
+<td>418</td>
+<td>I&rsquo;m a teapot</td>
+</tr>
+<tr>
+<td>429</td>
+<td>Too Many Requests &ndash; You&rsquo;re requesting too many kittens! Slow down!</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error &ndash; We had a problem with our server. Try again later.</td>
+</tr>
+<tr>
+<td>503</td>
+<td>Service Unavailable &ndash; We&rsquo;re temporarily offline for maintenance. Please try again later.</td>
+</tr>
+</tbody></table>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="shell">cURL</a>
+                <a href="#" data-language-name="go">go</a>
+                <a href="#" data-language-name="javascript">jQuery</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
