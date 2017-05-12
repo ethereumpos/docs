@@ -1,5 +1,5 @@
 ---
-title: API Reference
+title: Ethereum POS API Reference
 
 language_tabs:
   - shell: cURL
@@ -7,8 +7,7 @@ language_tabs:
   - javascript: jQuery
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
+  - <a href='https://ethereumpos.com'>Sign Up for a Developer Key</a>
 
 includes:
   - errors
@@ -18,20 +17,20 @@ search: true
 
 # Introduction
 
-Welcome to the ETH Process API! This documentation covers everything you need to know about accepting ethereum for your application. You'll be able to create orders, retrieve order information, and get your account history.
+Welcome to the Ethereum POS API! This documentation covers everything you need to know about accepting ethereum for your application. You'll be able to create orders, retrieve order information, and get your account history.
 
-ETH Process has a pretty basic transaction system.
+Ethereum POS has a pretty basic transaction system.
 
 1. Application creates new order for customer
 2. Customer pays QR code Ethereum address
 3. Successful alert for customer letting them know they paid. (expires in 15 minutes)
 4. Application receives a POST to callback URL of order information and transaction ID.
-5. ETH Process waits for 12 confirmations then sends entire wallet balance to your Ethereum address.
+5. Ethereum POS waits for 12 confirmations then sends entire wallet balance to your Ethereum address.
 7. Another POST request to your application's callback URL.
 
 We have language bindings in cURL, Golang, and in jQuery. You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
 
-ETH Process is currently in the process of making the transaction callback process a seamless and transparent process. The plan is to have the customer pay directly to ETH Process Contract with data to include your Ethereum address, order ID and callback information. Once you've collected your funds into your account inside of the contract, you'll be able to withdraw directly from contract, thus reducing the transaction fee each time a payment is transmitted.
+Ethereum POS is currently in the process of making the transaction callback process a seamless and transparent process. The plan is to have the customer pay directly to Ethereum POS Contract with data to include your Ethereum address, order ID and callback information. Once you've collected your funds into your account inside of the contract, you'll be able to withdraw directly from contract, thus reducing the transaction fee each time a payment is transmitted.
 
 ### Production API Endpoint (Ethereum Blockchain ETH)
 `https://api.ethereumpos.com`
@@ -41,11 +40,11 @@ ETH Process is currently in the process of making the transaction callback proce
 
 # Authentication
 
-> Currently ETH Process does not require Authentication for amount under $5.00 USD.
+> Currently Ethereum POS does not require Authentication for amount under $5.00 USD.
 
-ETH Process uses API keys to allow access to the API. You can register a new ETH Process API key at our [developer portal](http://example.com/register).
+Ethereum POS uses API keys to allow access to the API. You can register a new Ethereum POS API key at our [developer portal](http://example.com/register).
 
-ETH Process expects for the API key to be included in all requests over $5.00 USD. API requests to the server in a header that looks like the following:
+Ethereum POS expects for the API key to be included in all requests over $5.00 USD. API requests to the server in a header that looks like the following:
 
 `Authorization: MYKEYHERE`
 
@@ -265,7 +264,7 @@ Method Value | Description
 --------- | -----------
 pending | Customer has not sent this transaction yet.
 success | Customer has sent the correct amount and has at least 1 confirmation
-complete | ETH Process sent the entire wallet balance to the creators Ethereum address
+complete | Ethereum POS sent the entire wallet balance to the creators Ethereum address
 expired | Customer didn't send the transaction within 15 minutes. This can also happen if customer sent a low transaction fee.
 refunded | Merchant has successfully refunded the customer
 
@@ -369,7 +368,7 @@ Method Value | Description
 --------- | -----------
 pending | Customer has not sent this transaction yet.
 success | Customer has sent the correct amount and has at least 1 confirmation
-complete | ETH Process sent the entire wallet balance to the creators Ethereum address
+complete | Ethereum POS sent the entire wallet balance to the creators Ethereum address
 expired | Customer didn't send the transaction within 15 minutes. This can also happen if customer sent a low transaction fee.
 
 
@@ -417,7 +416,7 @@ Method Value | Description
 --------- | -----------
 pending | Customer has not sent this transaction yet.
 success | Customer has sent the correct amount and has at least 1 confirmation
-complete | ETH Process sent the entire wallet balance to the creators Ethereum address
+complete | Ethereum POS sent the entire wallet balance to the creators Ethereum address
 expired | Customer didn't send the transaction within 15 minutes. This can also happen if customer sent a low transaction fee.
 
 
@@ -425,7 +424,7 @@ expired | Customer didn't send the transaction within 15 minutes. This can also 
 
 ## Memberships
 
-ETH Processing has simple the understand billing
+Ethereum POSing has simple the understand billing
 
 ### Monthly Plans
 
@@ -445,28 +444,28 @@ TXT Messaging 500      |    $10.00    | 500
 Recurring Payments      |    $10.00    | 500
 
 #### Text Messaging
-This ETH Process plugin feature is great for applications that would like to text the user or developer of recent payment activity.
+This Ethereum POS plugin feature is great for applications that would like to text the user or developer of recent payment activity.
 
 ##### Recurring Payments
 Give your customers the ability to pay monthly with a dedicated QR code.
 
 ## Free Membership Limits
-ETH Process provides free transaction forwarding with amounts under $10.00.
+Ethereum POS provides free transaction forwarding with amounts under $10.00.
 
 ## Ethereum Fees
 
-When the customer first submits the transaction, they will be forced to pay for the transaction fee which is around $0.02 USD. Once ETH Process has at least 12 confirmations on the customers transaction, the entire balance of the wallet will be sent to your Ethereum address that you inserted on the /new request.
+When the customer first submits the transaction, they will be forced to pay for the transaction fee which is around $0.02 USD. Once Ethereum POS has at least 12 confirmations on the customers transaction, the entire balance of the wallet will be sent to your Ethereum address that you inserted on the /new request.
 
-For example, a customer sends $10.00. Most likely, the customer wallet will send around $10.02 to the ETH Process wallet. The ETH Process wallet will only receive $10.00 because of the $0.02 transaction fee. Once theres 12+ confirmation, ETH Process will send the entire wallet balance to your Ethereum address. You'll receive around $9.98, since the $0.02 transaction fee has been included.
+For example, a customer sends $10.00. Most likely, the customer wallet will send around $10.02 to the Ethereum POS wallet. The Ethereum POS wallet will only receive $10.00 because of the $0.02 transaction fee. Once theres 12+ confirmation, Ethereum POS will send the entire wallet balance to your Ethereum address. You'll receive around $9.98, since the $0.02 transaction fee has been included.
 
 <aside class="notice">
-ETH Process does not take any Ethereum or gas during this transaction process.
+Ethereum POS does not take any Ethereum or gas during this transaction process.
 </aside>
 
 # Contract Information
 
-ETH Process is currently in the process of making the transaction callback process a seamless and transparent process. The plan is to have the customer pay directly to ETH Process Contract with data to include your Ethereum address, order ID and callback information. Once you've collected your funds into your account inside of the contract, you'll be able to withdraw directly from contract, thus reducing the transaction fee each time a payment is transmitted.
+Ethereum POS is currently in the process of making the transaction callback process a seamless and transparent process. The plan is to have the customer pay directly to Ethereum POS Contract with data to include your Ethereum address, order ID and callback information. Once you've collected your funds into your account inside of the contract, you'll be able to withdraw directly from contract, thus reducing the transaction fee each time a payment is transmitted.
 
 1. Customer pays Etheruem address QR code
-2. ETH Process sends entire balance with order data to ETH Process contract.
+2. Ethereum POS sends entire balance with order data to Ethereum POS contract.
 3. Merchant/Developer can hold funds inside of the contract and withdraw when requested. (sending a call to contract from requesting address)
