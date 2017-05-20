@@ -3,11 +3,15 @@ title: Ethereum POS API Reference
 
 language_tabs:
   - shell: cURL
+  - php
+  - javascript: nodejs
   - go
-  - javascript: jQuery
+  - python
+  - ruby
+  - c
 
 toc_footers:
-  - <a href='https://ethereumpos.com'>Sign Up for a Developer Key</a>
+  - <a href='https://ethereumpos.com'>Sign Up for a API Key</a>
 
 includes:
   - errors
@@ -40,8 +44,6 @@ Ethereum POS is currently in the process of making the transaction callback proc
 
 # Authentication
 
-> Currently Ethereum POS does not require Authentication for amount under $5.00 USD.
-
 Ethereum POS uses API keys to allow access to the API. You can register a new Ethereum POS API key at our [developer portal](http://example.com/register).
 
 Ethereum POS expects for the API key to be included in all requests over $5.00 USD. API requests to the server in a header that looks like the following:
@@ -57,14 +59,116 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
 ## Create New Order
 
 ```shell
-curl -X POST -H "Content-Type: application/json" -d '{
+curl -X POST -H "Authorization: MYAPIKEY" -H "Content-Type: application/json" -d '{
     "amount": "13.54",
     "address": "0x3f05dc64b34f5063461f81d88972a3f542f57331",
     "callback": "http://domain.com"
 }' "https://api.ethereumpos.com/order"
 ```
 
+```php
+<?php
+
+$request = new HttpRequest();
+$request->setUrl('https://api.ethereumpos.com/order');
+$request->setMethod(HTTP_METH_POST);
+
+$request->setHeaders(array(
+  'Authorization' => 'MYAPIKEY'
+  'Content-Type' => 'application/json'
+));
+
+$request->setBody('{
+       "amount": "13.54",
+       "address": "0x3f05dc64b34f5063461f81d88972a3f542f57331",
+       "callback": "http://domain.com"
+   }');
+
+try {
+  $response = $request->send();
+
+  echo $response->getBody();
+} catch (HttpException $ex) {
+  echo $ex;
+}
+```
+
+```javascript
+var http = require("https");
+
+var options = {
+  "method": "POST",
+  "hostname": "api.ethereumpos.com",
+  "port": null,
+  "path": "/order",
+  "headers": {
+    "Authorization": "MYAPIKEY",
+    "Content-Type": "application/json"
+  }
+};
+
+var req = http.request(options, function (res) {
+  var chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    var body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.write(JSON.stringify({
+                "amount": "13.54",
+                "address": "0x3f05dc64b34f5063461f81d88972a3f542f57331",
+                "callback": "http://domain.com"
+            });
+req.end();
+```
+
 ```go
+NOT complete
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.ethereumpos.com")
+
+payload = "{ \"amount\": \"13.54\", \"address\": \"0x3f05dc64b34f5063461f81d88972a3f542f57331\", \"callback\": \"http://domain.com\" }"
+
+headers = { 'Authorization': "MYAPIKEY", 'Content-Type': "application/json" }
+
+conn.request("POST", "/order", payload, headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
+```
+
+```ruby
+require 'uri'
+require 'net/http'
+
+url = URI("https://api.ethereumpos.com/order")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::Post.new(url)
+request["Authorization"] = 'MYAPIKEY'
+request["Content-Type"] = 'application/json'
+request.body = "{ \"amount\": \"13.54\", \"address\": \"0x3f05dc64b34f5063461f81d88972a3f542f57331\", \"callback\": \"http://domain.com\" }"
+
+response = http.request(request)
+puts response.read_body
+```
+
+```c
 NOT complete
 ```
 
@@ -100,30 +204,13 @@ This endpoint creates NEW ORDERS for your customers to send money to.
 
 Parameter | Required | Description
 --------- | ------- | -----------
-amount | true | If set to true, the result will also include cats.
-address | true | If set to true, the result will also include cats.
-callback | true | If set to true, the result will also include cats.
-item_title | false | If set to true, the result will also include cats.
-item_description | false | If set to true, the result will also include cats.
-item_image | false | If set to true, the result will also include cats.
-
-
-### Response Parameters
-
-Parameter | Meaning
----------- | -------
-400 | Bad Request -- Your request sucks
-401 | Unauthorized -- Your API key is wrong
-403 | Forbidden -- The kitten requested is hidden for administrators only
-404 | Not Found -- The specified kitten could not be found
-405 | Method Not Allowed -- You tried to access a kitten with an invalid method
-406 | Not Acceptable -- You requested a format that isn't json
-410 | Gone -- The kitten requested has been removed from our servers
-418 | I'm a teapot
-429 | Too Many Requests -- You're requesting too many kittens! Slow down!
-500 | Internal Server Error -- We had a problem with our server. Try again later.
-503 | Service Unavailable -- We're temporarily offline for maintenance. Please try again later.
-
+amount | true | Currency Value of order ($25.85)
+address | true | Your Ethereum Address, payment will forward to.
+callback | true | Callback URL for your application for this order.
+ref_id | false | Order ID based on your website or application (optional)
+item_title | false | The item title to be shown to user (optional)
+item_description | false | The item description for user (optional)
+item_image | false | The item image to display to user (optional)
 
 
 ## Get Order Information
@@ -164,7 +251,11 @@ This endpoint retrieves order information
 
 `GET https://api.ethereumpos.com/order/<ID>`
 
-### URL Parameters
+### Query Parameters
+
+Parameter | Required | Description
+--------- | ------- | -----------
+ID | true | Ethereum POS Order ID
 
 
 # History
@@ -260,6 +351,8 @@ Parameter | Value
 --------- | -----------
 METHOD | pending,success,complete,expired,refunded
 
+### Method Values
+
 Method Value | Description
 --------- | -----------
 pending | Customer has not sent this transaction yet.
@@ -269,10 +362,12 @@ expired | Customer didn't send the transaction within 15 minutes. This can also 
 refunded | Merchant has successfully refunded the customer
 
 
-## Recurring Billing Status
+# System Information
+
+## Show Sever Status
 
 ```shell
-curl -X GET "https://api.ethereumpos.com/status/recurring/<METHOD>"
+curl -X GET "https://api.ethereumpos.com/status"
 ```
 
 ```go
@@ -283,44 +378,23 @@ yoyoyooyoyoyoyo
 
 ```json
 {
-	"id": 14,
-	"address": "0x5be4c1b30534a6a30bf9f68ad6d3c0dc2a7fe292",
-	"confirmations": 0,
-	"currency": "usd",
-	"currency_amount": "3.30",
-	"expected_amount": "0.0681",
-	"payment_url": "https://ethereumpos.com/payment/14",
-	"status": "paid",
-	"paid": true,
-	"eth_price": "48.45",
-	"qr_code": "http://chart.apis.google.com/chart?cht=qr&chs=500x500&chl=ethereum%3A0x5be4c1b30534a6a30bf9f68ad6d3c0dc2a7fe292&chld=H|0",
-	"transaction_id": "0",
-	"item_title": "New Item",
-	"item_description": "Description",
-	"item_image": "https://ethereumpos.com/images/ethereum.svg",
-	"created_at": "0001-01-01T00:00:00Z"
+  "block": "966798",
+  "test": true
 }
 ```
 
-This endpoint retrieves orders attached to recurring billing
+This endpoint retrieves information about the merchant/developer account.
 
 ### HTTP Request
 
-`GET https://api.ethereumpos.com/status/recurring/<METHOD>`
+`GET https://api.ethereumpos.com/status`
 
-### URL Parameters
+### Response Values
 
-Parameter | Value
+Value | Description
 --------- | -----------
-METHOD | expired,active,pending,upcoming
-
-Method Value | Description
---------- | -----------
-expired | Customer did not continue with the recurring payment, more than 10 days late.
-active | Customer has paid in full till the end timestamp.
-pending | Customer has not paid for the payment yet and is less then 10 days late.
-upcoming | Customers recurring payments upcoming in next 10 days
-
+block | the most up to date block with Ethereum and our servers.
+test | will be set to true if request is sent to test API.
 
 # User Information
 
