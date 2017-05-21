@@ -219,8 +219,97 @@ item_image | false | The item image to display to user (optional)
 curl -X GET "https://api.ethereumpos.com/order/<ID>"
 ```
 
+```php
+<?php
+
+$request = new HttpRequest();
+$request->setUrl('https://api.ethereumpos.com/order/<ID>');
+$request->setMethod(HTTP_METH_GET);
+
+$request->setHeaders(array(
+  'Authorization' => 'MYAPIKEY'
+  'Content-Type' => 'application/json'
+));
+
+try {
+  $response = $request->send();
+
+  echo $response->getBody();
+} catch (HttpException $ex) {
+  echo $ex;
+}
+```
+
+```javascript
+var http = require("https");
+
+var options = {
+  "method": "GET",
+  "hostname": "api.ethereumpos.com",
+  "port": null,
+  "path": "/order/<ID>",
+  "headers": {
+    "Authorization": "MYAPIKEY",
+    "Content-Type": "application/json"
+  }
+};
+
+var req = http.request(options, function (res) {
+  var chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    var body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.write();
+req.end();
+```
+
 ```go
-yoyoyooyoyoyoyo
+NOT complete
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.ethereumpos.com")
+
+headers = { 'Authorization': "MYAPIKEY", 'Content-Type': "application/json" }
+
+conn.request("GET", "/order/<ID>", "", headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
+```
+
+```ruby
+require 'uri'
+require 'net/http'
+
+url = URI("https://api.ethereumpos.com/order/<ID>")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::Get.new(url)
+request["Authorization"] = 'MYAPIKEY'
+request["Content-Type"] = 'application/json'
+
+response = http.request(request)
+puts response.read_body
+```
+
+```c
+NOT complete
 ```
 
 > The above command returns JSON structured like this:
@@ -266,8 +355,97 @@ ID | true | Ethereum POS Order ID
 curl -X GET "https://api.ethereumpos.com/history"
 ```
 
+```php
+<?php
+
+$request = new HttpRequest();
+$request->setUrl('https://api.ethereumpos.com/history');
+$request->setMethod(HTTP_METH_GET);
+
+$request->setHeaders(array(
+  'Authorization' => 'MYAPIKEY'
+  'Content-Type' => 'application/json'
+));
+
+try {
+  $response = $request->send();
+
+  echo $response->getBody();
+} catch (HttpException $ex) {
+  echo $ex;
+}
+```
+
+```javascript
+var http = require("https");
+
+var options = {
+  "method": "GET",
+  "hostname": "api.ethereumpos.com",
+  "port": null,
+  "path": "/history",
+  "headers": {
+    "Authorization": "MYAPIKEY",
+    "Content-Type": "application/json"
+  }
+};
+
+var req = http.request(options, function (res) {
+  var chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    var body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.write();
+req.end();
+```
+
 ```go
-yoyoyooyoyoyoyo
+NOT complete
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.ethereumpos.com")
+
+headers = { 'Authorization': "MYAPIKEY", 'Content-Type': "application/json" }
+
+conn.request("GET", "/history", "", headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
+```
+
+```ruby
+require 'uri'
+require 'net/http'
+
+url = URI("https://api.ethereumpos.com/history")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::Get.new(url)
+request["Authorization"] = 'MYAPIKEY'
+request["Content-Type"] = 'application/json'
+
+response = http.request(request)
+puts response.read_body
+```
+
+```c
+NOT complete
 ```
 
 > The above command returns JSON structured like this:
@@ -291,7 +469,8 @@ yoyoyooyoyoyoyo
       "return_to": "0x888a5fEFAA912778FdBf8eC222F299e96057c43b",
       "paid": true,
       "expired": false
-    }
+    },
+    ...
   ]
 }
 ```
@@ -309,8 +488,97 @@ This endpoint retrieves order information
 curl -X GET "https://api.ethereumpos.com/history/<METHOD>"
 ```
 
+```php
+<?php
+
+$request = new HttpRequest();
+$request->setUrl('https://api.ethereumpos.com/history/<METHOD>');
+$request->setMethod(HTTP_METH_GET);
+
+$request->setHeaders(array(
+  'Authorization' => 'MYAPIKEY'
+  'Content-Type' => 'application/json'
+));
+
+try {
+  $response = $request->send();
+
+  echo $response->getBody();
+} catch (HttpException $ex) {
+  echo $ex;
+}
+```
+
+```javascript
+var http = require("https");
+
+var options = {
+  "method": "GET",
+  "hostname": "api.ethereumpos.com",
+  "port": null,
+  "path": "/history/<METHOD>",
+  "headers": {
+    "Authorization": "MYAPIKEY",
+    "Content-Type": "application/json"
+  }
+};
+
+var req = http.request(options, function (res) {
+  var chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    var body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.write();
+req.end();
+```
+
 ```go
-yoyoyooyoyoyoyo
+NOT complete
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.ethereumpos.com")
+
+headers = { 'Authorization': "MYAPIKEY", 'Content-Type': "application/json" }
+
+conn.request("GET", "/history/<METHOD>", "", headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
+```
+
+```ruby
+require 'uri'
+require 'net/http'
+
+url = URI("https://api.ethereumpos.com/history/<METHOD>")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::Get.new(url)
+request["Authorization"] = 'MYAPIKEY'
+request["Content-Type"] = 'application/json'
+
+response = http.request(request)
+puts response.read_body
+```
+
+```c
+NOT complete
 ```
 
 > The above command returns JSON structured like this:
@@ -370,8 +638,85 @@ refunded | Merchant has successfully refunded the customer
 curl -X GET "https://api.ethereumpos.com/status"
 ```
 
+```php
+<?php
+
+$request = new HttpRequest();
+$request->setUrl('https://api.ethereumpos.com/status');
+$request->setMethod(HTTP_METH_GET);
+
+try {
+  $response = $request->send();
+
+  echo $response->getBody();
+} catch (HttpException $ex) {
+  echo $ex;
+}
+```
+
+```javascript
+var http = require("https");
+
+var options = {
+  "method": "GET",
+  "hostname": "api.ethereumpos.com",
+  "port": null,
+  "path": "/status"
+};
+
+var req = http.request(options, function (res) {
+  var chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    var body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.write();
+req.end();
+```
+
 ```go
-yoyoyooyoyoyoyo
+NOT complete
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.ethereumpos.com")
+
+conn.request("GET", "/status", "", "")
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
+```
+
+```ruby
+require 'uri'
+require 'net/http'
+
+url = URI("https://api.ethereumpos.com/status")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::Get.new(url)
+request["Content-Type"] = 'application/json'
+
+response = http.request(request)
+puts response.read_body
+```
+
+```c
+NOT complete
 ```
 
 > The above command returns JSON structured like this:
