@@ -270,12 +270,11 @@
 You must replace <code>MYKEYHERE</code> with your personal API key.
 </aside>
 
-<h1 id="orders">Orders</h1>
+<h1 id="orders-api">Orders API</h1>
 
 <h2 id="create-new-order">Create New Order</h2>
 <pre class="highlight shell tab-shell"><code>curl -X POST -H <span class="s2">"Authorization: MYAPIKEY"</span> -H <span class="s2">"Content-Type: application/json"</span> -d <span class="s1">'{
     "amount": "13.54",
-    "address": "0x3f05dc64b34f5063461f81d88972a3f542f57331",
     "callback": "http://domain.com"
 }'</span> <span class="s2">"https://api.ethereumpos.com/order"</span>
 </code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
@@ -375,7 +374,7 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
   </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1679548078de9a5a9129d75719b5e442abd5b2e5"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"expected_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.4173"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usd"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"currency_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"currency_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"13.54"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"payment_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://ethereumpos.com/test_payment/716101402"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"eth_price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"69.98"</span><span class="p">,</span><span class="w">
@@ -406,16 +405,11 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
 <tr>
 <td>amount</td>
 <td>true</td>
-<td>Currency Value of order ($25.85)</td>
-</tr>
-<tr>
-<td>address</td>
-<td>true</td>
-<td>Your Ethereum Address, payment will forward to.</td>
+<td>Currency value of order in USD ($25.85)</td>
 </tr>
 <tr>
 <td>callback</td>
-<td>true</td>
+<td>false</td>
 <td>Callback URL for your application for this order.</td>
 </tr>
 <tr>
@@ -561,12 +555,235 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
 </tr>
 </tbody></table>
 
-<h1 id="history">History</h1>
+<h1 id="subscriptions-api">Subscriptions API</h1>
+
+<h2 id="create-subscription">Create Subscription</h2>
+<pre class="highlight shell tab-shell"><code>curl -X POST -H <span class="s2">"Authorization: MYAPIKEY"</span> -d <span class="s1">'{
+    "amount": "13.54",
+    "recurring": "1m",
+    "callback": "http://domain.com"
+}'</span> <span class="s2">"https://api.ethereumpos.com/subscription"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">32341402</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usd"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"currency_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"29.20"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Create a Recurring Subscription for customers that are billed the same for each month/week/day/etc.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST https://api.ethereumpos.com/subscription</code></p>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>amount</td>
+<td>true</td>
+<td>Currency value of order in USD ($25.85)</td>
+</tr>
+<tr>
+<td>callback</td>
+<td>false</td>
+<td>Callback URL for your application for this order.</td>
+</tr>
+<tr>
+<td>recurring</td>
+<td>true</td>
+<td>This subscription is due every ___ days.</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>recurring can be in format 14d, 1m, 2w format. (d=day, m=month, w=week)</li>
+</ul>
+
+<h2 id="create-subscription-order">Create Subscription Order</h2>
+
+<p>This endpoint will create a new order for your subscription. </p>
+<pre class="highlight shell tab-shell"><code>curl -X POST -H <span class="s2">"Authorization: MYAPIKEY"</span> -d <span class="s1">'{
+    "id": 34654567,
+    "ref_id": "2312324",
+    "ref_address": "0x00000000000000000000000000000000",
+    "callback": "http://domain.com"
+}'</span> <span class="s2">"https://api.ethereumpos.com/subscription/order"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">736101402</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1679548078de9a5a9129d75719b5e442abd5b2e5"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"expected_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.4173"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usd"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"currency_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"13.54"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"payment_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://ethereumpos.com/test_payment/716101402"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"eth_price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"69.98"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"qr_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://chart.apis.google.com/chart?cht=qr&amp;chs=500x500&amp;chl=ethereum%3A0x1679548078de9a5a9129d75719b5e442abd5b2e5&amp;chld=H|0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"transaction_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"sent_transaction"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0001-01-01T00:00:00Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"return_to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x888a5fEFAA912778FdBf8eC222F299e96057c43b"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"paid"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"expired"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"subscription"</span><span class="p">:</span><span class="w"> </span><span class="mi">34654567</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST https://api.ethereumpos.com/subscription/order</code></p>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ID</td>
+<td>true</td>
+<td>Ethereum POS Subscription ID</td>
+</tr>
+<tr>
+<td>callback</td>
+<td>false</td>
+<td>A callback URL to notify ETH payment</td>
+</tr>
+<tr>
+<td>ref_id</td>
+<td>false</td>
+<td>Reference ID for your application</td>
+</tr>
+<tr>
+<td>ref_address</td>
+<td>false</td>
+<td>Reference another ETH address for contract callbacks</td>
+</tr>
+</tbody></table>
+<pre class="highlight shell tab-shell"><code>curl -X GET <span class="s2">"https://api.ethereumpos.com/subscription/&lt;id&gt;"</span>
+</code></pre>
+<h2 id="get-subscription">Get Subscription</h2>
+
+<p>This endpoint retrieves subscription information</p>
+<pre class="highlight shell tab-shell"><code>curl -X GET <span class="s2">"https://api.ethereumpos.com/subscription/&lt;ID&gt;"</span>
+</code></pre>
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">GET https://api.ethereumpos.com/subscription/&lt;ID&gt;</code></p>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ID</td>
+<td>true</td>
+<td>Ethereum POS Order ID</td>
+</tr>
+</tbody></table>
+
+<h1 id="history-api">History API</h1>
 
 <h2 id="show-all-orders">Show All Orders</h2>
-<pre class="highlight shell tab-shell"><code>curl -X GET <span class="s2">"https://api.ethereumpos.com/history"</span>
-</code></pre><pre class="highlight go tab-go"><code><span class="n">yoyoyooyoyoyoyo</span><span class="x">
-</span></code></pre>
+
+<p>This endpoint retrieves all orders related to your account.</p>
+<pre class="highlight shell tab-shell"><code>curl -X GET -H <span class="s2">"Authorization: MYAPIKEY"</span> <span class="s2">"https://api.ethereumpos.com/history"</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+
+<span class="nv">$request</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">HttpRequest</span><span class="p">();</span>
+<span class="nv">$request</span><span class="o">-&gt;</span><span class="na">setUrl</span><span class="p">(</span><span class="s1">'https://api.ethereumpos.com/history'</span><span class="p">);</span>
+<span class="nv">$request</span><span class="o">-&gt;</span><span class="na">setMethod</span><span class="p">(</span><span class="nx">HTTP_METH_GET</span><span class="p">);</span>
+
+<span class="nv">$request</span><span class="o">-&gt;</span><span class="na">setHeaders</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+  <span class="s1">'Authorization'</span> <span class="o">=&gt;</span> <span class="s1">'MYAPIKEY'</span>
+  <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span>
+<span class="p">));</span>
+
+<span class="k">try</span> <span class="p">{</span>
+  <span class="nv">$response</span> <span class="o">=</span> <span class="nv">$request</span><span class="o">-&gt;</span><span class="na">send</span><span class="p">();</span>
+
+  <span class="k">echo</span> <span class="nv">$response</span><span class="o">-&gt;</span><span class="na">getBody</span><span class="p">();</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">HttpException</span> <span class="nv">$ex</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">echo</span> <span class="nv">$ex</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"https"</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s2">"method"</span><span class="p">:</span> <span class="s2">"GET"</span><span class="p">,</span>
+  <span class="s2">"hostname"</span><span class="p">:</span> <span class="s2">"api.ethereumpos.com"</span><span class="p">,</span>
+  <span class="s2">"port"</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+  <span class="s2">"path"</span><span class="p">:</span> <span class="s2">"/history"</span><span class="p">,</span>
+  <span class="s2">"headers"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"Authorization"</span><span class="p">:</span> <span class="s2">"MYAPIKEY"</span><span class="p">,</span>
+    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">req</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">chunks</span> <span class="o">=</span> <span class="p">[];</span>
+
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">chunks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">chunk</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"end"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">chunks</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="nx">req</span><span class="p">.</span><span class="nx">write</span><span class="p">();</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">NOT</span><span class="x"> </span><span class="n">complete</span><span class="x">
+</span></code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">http.client</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s">"api.ethereumpos.com"</span><span class="p">)</span>
+
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'Authorization'</span><span class="p">:</span> <span class="s">"MYAPIKEY"</span><span class="p">,</span> <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">"application/json"</span> <span class="p">}</span>
+
+<span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span> <span class="s">"/history"</span><span class="p">,</span> <span class="s">""</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
+</code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
+<span class="nb">require</span> <span class="s1">'net/http'</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.ethereumpos.com/history"</span><span class="p">)</span>
+
+<span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
+<span class="n">http</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
+<span class="n">http</span><span class="p">.</span><span class="nf">verify_mode</span> <span class="o">=</span> <span class="no">OpenSSL</span><span class="o">::</span><span class="no">SSL</span><span class="o">::</span><span class="no">VERIFY_NONE</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Get</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"Authorization"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'MYAPIKEY'</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"Content-Type"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'application/json'</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
+</code></pre><pre class="highlight c tab-c"><code><span class="n">NOT</span> <span class="n">complete</span>
+</code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
@@ -588,7 +805,8 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
       </span><span class="s2">"return_to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x888a5fEFAA912778FdBf8eC222F299e96057c43b"</span><span class="p">,</span><span class="w">
       </span><span class="s2">"paid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
       </span><span class="s2">"expired"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
-    </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="err">...</span><span class="w">
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
@@ -599,9 +817,83 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
 <p><code class="prettyprint">GET https://api.ethereumpos.com/history</code></p>
 
 <h2 id="show-orders-with-status">Show Orders with Status</h2>
-<pre class="highlight shell tab-shell"><code>curl -X GET <span class="s2">"https://api.ethereumpos.com/history/&lt;METHOD&gt;"</span>
-</code></pre><pre class="highlight go tab-go"><code><span class="n">yoyoyooyoyoyoyo</span><span class="x">
-</span></code></pre>
+<pre class="highlight shell tab-shell"><code>curl -X GET -H <span class="s2">"Authorization: MYAPIKEY"</span> <span class="s2">"https://api.ethereumpos.com/history/&lt;METHOD&gt;"</span>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+
+<span class="nv">$request</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">HttpRequest</span><span class="p">();</span>
+<span class="nv">$request</span><span class="o">-&gt;</span><span class="na">setUrl</span><span class="p">(</span><span class="s1">'https://api.ethereumpos.com/history/&lt;METHOD&gt;'</span><span class="p">);</span>
+<span class="nv">$request</span><span class="o">-&gt;</span><span class="na">setMethod</span><span class="p">(</span><span class="nx">HTTP_METH_GET</span><span class="p">);</span>
+
+<span class="nv">$request</span><span class="o">-&gt;</span><span class="na">setHeaders</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+  <span class="s1">'Authorization'</span> <span class="o">=&gt;</span> <span class="s1">'MYAPIKEY'</span>
+  <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span>
+<span class="p">));</span>
+
+<span class="k">try</span> <span class="p">{</span>
+  <span class="nv">$response</span> <span class="o">=</span> <span class="nv">$request</span><span class="o">-&gt;</span><span class="na">send</span><span class="p">();</span>
+
+  <span class="k">echo</span> <span class="nv">$response</span><span class="o">-&gt;</span><span class="na">getBody</span><span class="p">();</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">HttpException</span> <span class="nv">$ex</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">echo</span> <span class="nv">$ex</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"https"</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s2">"method"</span><span class="p">:</span> <span class="s2">"GET"</span><span class="p">,</span>
+  <span class="s2">"hostname"</span><span class="p">:</span> <span class="s2">"api.ethereumpos.com"</span><span class="p">,</span>
+  <span class="s2">"port"</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+  <span class="s2">"path"</span><span class="p">:</span> <span class="s2">"/history/&lt;METHOD&gt;"</span><span class="p">,</span>
+  <span class="s2">"headers"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"Authorization"</span><span class="p">:</span> <span class="s2">"MYAPIKEY"</span><span class="p">,</span>
+    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">req</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">chunks</span> <span class="o">=</span> <span class="p">[];</span>
+
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">chunks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">chunk</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"end"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">chunks</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="nx">req</span><span class="p">.</span><span class="nx">write</span><span class="p">();</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">NOT</span><span class="x"> </span><span class="n">complete</span><span class="x">
+</span></code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">http.client</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s">"api.ethereumpos.com"</span><span class="p">)</span>
+
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'Authorization'</span><span class="p">:</span> <span class="s">"MYAPIKEY"</span><span class="p">,</span> <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">"application/json"</span> <span class="p">}</span>
+
+<span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span> <span class="s">"/history/&lt;METHOD&gt;"</span><span class="p">,</span> <span class="s">""</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
+</code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
+<span class="nb">require</span> <span class="s1">'net/http'</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.ethereumpos.com/history/&lt;METHOD&gt;"</span><span class="p">)</span>
+
+<span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
+<span class="n">http</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
+<span class="n">http</span><span class="p">.</span><span class="nf">verify_mode</span> <span class="o">=</span> <span class="no">OpenSSL</span><span class="o">::</span><span class="no">SSL</span><span class="o">::</span><span class="no">VERIFY_NONE</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Get</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"Authorization"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'MYAPIKEY'</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"Content-Type"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'application/json'</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
+</code></pre><pre class="highlight c tab-c"><code><span class="n">NOT</span> <span class="n">complete</span>
+</code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
@@ -623,7 +915,8 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
       </span><span class="s2">"return_to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x888a5fEFAA912778FdBf8eC222F299e96057c43b"</span><span class="p">,</span><span class="w">
       </span><span class="s2">"paid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
       </span><span class="s2">"expired"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
-    </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="err">...</span><span class="w">
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
@@ -677,12 +970,74 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
 </tr>
 </tbody></table>
 
-<h1 id="system-information">System Information</h1>
+<h1 id="system-api">System API</h1>
 
 <h2 id="show-sever-status">Show Sever Status</h2>
 <pre class="highlight shell tab-shell"><code>curl -X GET <span class="s2">"https://api.ethereumpos.com/status"</span>
-</code></pre><pre class="highlight go tab-go"><code><span class="n">yoyoyooyoyoyoyo</span><span class="x">
-</span></code></pre>
+</code></pre><pre class="highlight php tab-php"><code><span class="cp">&lt;?php</span>
+
+<span class="nv">$request</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">HttpRequest</span><span class="p">();</span>
+<span class="nv">$request</span><span class="o">-&gt;</span><span class="na">setUrl</span><span class="p">(</span><span class="s1">'https://api.ethereumpos.com/status'</span><span class="p">);</span>
+<span class="nv">$request</span><span class="o">-&gt;</span><span class="na">setMethod</span><span class="p">(</span><span class="nx">HTTP_METH_GET</span><span class="p">);</span>
+
+<span class="k">try</span> <span class="p">{</span>
+  <span class="nv">$response</span> <span class="o">=</span> <span class="nv">$request</span><span class="o">-&gt;</span><span class="na">send</span><span class="p">();</span>
+
+  <span class="k">echo</span> <span class="nv">$response</span><span class="o">-&gt;</span><span class="na">getBody</span><span class="p">();</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">HttpException</span> <span class="nv">$ex</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">echo</span> <span class="nv">$ex</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"https"</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s2">"method"</span><span class="p">:</span> <span class="s2">"GET"</span><span class="p">,</span>
+  <span class="s2">"hostname"</span><span class="p">:</span> <span class="s2">"api.ethereumpos.com"</span><span class="p">,</span>
+  <span class="s2">"port"</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+  <span class="s2">"path"</span><span class="p">:</span> <span class="s2">"/status"</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">req</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">chunks</span> <span class="o">=</span> <span class="p">[];</span>
+
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">chunks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">chunk</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"end"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">chunks</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="nx">req</span><span class="p">.</span><span class="nx">write</span><span class="p">();</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+</code></pre><pre class="highlight go tab-go"><code><span class="n">NOT</span><span class="x"> </span><span class="n">complete</span><span class="x">
+</span></code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">http.client</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s">"api.ethereumpos.com"</span><span class="p">)</span>
+
+<span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span> <span class="s">"/status"</span><span class="p">,</span> <span class="s">""</span><span class="p">,</span> <span class="s">""</span><span class="p">)</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
+</code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
+<span class="nb">require</span> <span class="s1">'net/http'</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.ethereumpos.com/status"</span><span class="p">)</span>
+
+<span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
+<span class="n">http</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
+<span class="n">http</span><span class="p">.</span><span class="nf">verify_mode</span> <span class="o">=</span> <span class="no">OpenSSL</span><span class="o">::</span><span class="no">SSL</span><span class="o">::</span><span class="no">VERIFY_NONE</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Get</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"Content-Type"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'application/json'</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
+</code></pre><pre class="highlight c tab-c"><code><span class="n">NOT</span> <span class="n">complete</span>
+</code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
@@ -715,119 +1070,147 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
 </tr>
 </tbody></table>
 
-<h1 id="user-information">User Information</h1>
+<h1 id="smart-contract-api">Smart Contract API</h1>
 
-<h2 id="show-account-information">Show Account Information</h2>
-<pre class="highlight shell tab-shell"><code>curl -X GET <span class="s2">"https://api.ethereumpos.com/user"</span>
-</code></pre><pre class="highlight go tab-go"><code><span class="n">yoyoyooyoyoyoyo</span><span class="x">
-</span></code></pre>
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x5be4c1b30534a6a30bf9f68ad6d3c0dc2a7fe292"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"confirmations"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usd"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"currency_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.30"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"expected_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.0681"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"payment_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://ethereumpos.com/payment/14"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"paid"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"paid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"eth_price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"48.45"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"qr_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://chart.apis.google.com/chart?cht=qr&amp;chs=500x500&amp;chl=ethereum%3A0x5be4c1b30534a6a30bf9f68ad6d3c0dc2a7fe292&amp;chld=H|0"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"transaction_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"item_title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"New Item"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"item_description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Description"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"item_image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://ethereumpos.com/images/ethereum.svg"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0001-01-01T00:00:00Z"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<p>This endpoint retrieves information about the merchant/developer account.</p>
+<h2 id="introduction">Introduction</h2>
+<pre class="highlight shell tab-shell"><code>contract EthereumPOS <span class="o">{</span>
+    <span class="k">function </span>subscriptionActive<span class="o">(</span>int256 id<span class="o">)</span> constant returns <span class="o">(</span>bool<span class="o">)</span>;
+    <span class="k">function </span>subscriptionStartedDate<span class="o">(</span>int256 id<span class="o">)</span> constant returns <span class="o">(</span>string<span class="o">)</span>;
+    <span class="k">function </span>subscriptionStartedBlock<span class="o">(</span>int256 id<span class="o">)</span> constant returns <span class="o">(</span>int<span class="o">)</span>;
+    <span class="k">function </span>subscriptionExpiresDate<span class="o">(</span>int256 id<span class="o">)</span> constant returns <span class="o">(</span>string<span class="o">)</span>;
+    <span class="k">function </span>subscriptionExpiresBlock<span class="o">(</span>int256 id<span class="o">)</span> constant returns <span class="o">(</span>int<span class="o">)</span>;
+    <span class="k">function </span>subscriptionAddressActive<span class="o">(</span>address wallet<span class="o">)</span> constant returns <span class="o">(</span>bool<span class="o">)</span>;
+    <span class="k">function </span>orderPaid<span class="o">(</span>int256 id<span class="o">)</span> constant returns <span class="o">(</span>bool<span class="o">)</span>;
+    <span class="k">function </span>orderPaidBlock<span class="o">(</span>int256 id<span class="o">)</span> constant returns <span class="o">(</span>int<span class="o">)</span>;
+    <span class="k">function </span>approvedSender<span class="o">()</span> constant returns <span class="o">(</span>address<span class="o">)</span>;
+<span class="o">}</span>
+</code></pre>
+<p>Ethereum POS includes a ethereum smart contract so your contracts can reference it run functionality 
+within the blockchain within your own environment.</p>
 
-<h3 id="http-request">HTTP Request</h3>
-
-<p><code class="prettyprint">GET https://api.ethereumpos.com/user</code></p>
+<h3 id="contract-calls">Contract Calls</h3>
 
 <table><thead>
 <tr>
-<th>Method Value</th>
+<th>Value</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>pending</td>
-<td>Customer has not sent this transaction yet.</td>
+<td>subscriptionActive</td>
+<td>will response true or false if subscription is active/paid</td>
 </tr>
 <tr>
-<td>success</td>
-<td>Customer has sent the correct amount and has at least 1 confirmation</td>
+<td>subscriptionStartedDate</td>
+<td>subscription starting date as a string in UTC format</td>
 </tr>
 <tr>
-<td>complete</td>
-<td>Ethereum POS sent the entire wallet balance to the creators Ethereum address</td>
+<td>subscriptionStartedBlock</td>
+<td>subscription initial block as int</td>
 </tr>
 <tr>
-<td>expired</td>
-<td>Customer didn&rsquo;t send the transaction within 15 minutes. This can also happen if customer sent a low transaction fee.</td>
+<td>subscriptionExpiresDate</td>
+<td>subscription expiration date as a string in UTC format</td>
+</tr>
+<tr>
+<td>subscriptionExpiresBlock</td>
+<td>subscription initial block as int</td>
+</tr>
+<tr>
+<td>subscriptionAddressActive</td>
+<td>subscription for a ref_address specified with new order</td>
+</tr>
+<tr>
+<td>orderPaid</td>
+<td>responds true or false if order was paid</td>
+</tr>
+<tr>
+<td>orderPaidBlock</td>
+<td>responds the block number when order was paid</td>
+</tr>
+<tr>
+<td>approvedSender</td>
+<td>returns the ETH address of the trusted Ethereum POS account</td>
 </tr>
 </tbody></table>
 
-<h2 id="account-balance-and-history">Account Balance and History</h2>
-<pre class="highlight shell tab-shell"><code>curl -X GET <span class="s2">"https://api.ethereumpos.com/user/history"</span>
-</code></pre><pre class="highlight go tab-go"><code><span class="n">yoyoyooyoyoyoyo</span><span class="x">
-</span></code></pre>
+<h2 id="contract-callbacks">Contract Callbacks</h2>
+
 <blockquote>
-<p>The above command returns JSON structured like this:</p>
+<p>Insert the Ethereum POS Contract API into your contract</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x5be4c1b30534a6a30bf9f68ad6d3c0dc2a7fe292"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"confirmations"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usd"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"currency_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.30"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"expected_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.0681"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"payment_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://ethereumpos.com/payment/14"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"paid"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"paid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"eth_price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"48.45"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"qr_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://chart.apis.google.com/chart?cht=qr&amp;chs=500x500&amp;chl=ethereum%3A0x5be4c1b30534a6a30bf9f68ad6d3c0dc2a7fe292&amp;chld=H|0"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"transaction_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"item_title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"New Item"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"item_description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Description"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"item_image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://ethereumpos.com/images/ethereum.svg"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0001-01-01T00:00:00Z"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<p>This endpoint retrieves information about the merchant/developer total income, outgoing, total transactions, etc.</p>
+<pre class="highlight shell tab-shell"><code><span class="k">function </span>callbackOrder<span class="o">(</span>uint256 id, string ref_id, bool paid<span class="o">)</span> <span class="o">{</span>
+    require<span class="o">(</span>msg.sender <span class="o">==</span> EthereumPOS.approvedSender<span class="o">())</span>;
+    // run your functions here
 
-<h3 id="http-request">HTTP Request</h3>
+<span class="o">}</span>
 
-<p><code class="prettyprint">GET https://api.ethereumpos.com/user/history</code></p>
+<span class="k">function </span>callbackSubscription<span class="o">(</span>uint256 id, string ref_id, address ref_address, bool active<span class="o">)</span> <span class="o">{</span>
+    require<span class="o">(</span>msg.sender <span class="o">==</span> EthereumPOS.approvedSender<span class="o">())</span>;
+    // run your functions here
 
-<table><thead>
-<tr>
-<th>Method Value</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>pending</td>
-<td>Customer has not sent this transaction yet.</td>
-</tr>
-<tr>
-<td>success</td>
-<td>Customer has sent the correct amount and has at least 1 confirmation</td>
-</tr>
-<tr>
-<td>complete</td>
-<td>Ethereum POS sent the entire wallet balance to the creators Ethereum address</td>
-</tr>
-<tr>
-<td>expired</td>
-<td>Customer didn&rsquo;t send the transaction within 15 minutes. This can also happen if customer sent a low transaction fee.</td>
-</tr>
-</tbody></table>
+<span class="o">}</span>
+</code></pre>
+<p>When you choose to use Ethereum POS contract callback feature, you must include a callback 
+function inside of your contract. Ethereum POS will submit a contract call to the callback address.</p>
+
+<h2 id="example-contract">Example Contract</h2>
+<pre class="highlight shell tab-shell"><code>pragma solidity ^0.4.11;
+
+contract EthereumPOS <span class="o">{</span>
+    <span class="k">function </span>subscriptionActive<span class="o">(</span>int256 id<span class="o">)</span> constant returns <span class="o">(</span>bool<span class="o">)</span>;
+    <span class="k">function </span>subscriptionStartedDate<span class="o">(</span>int256 id<span class="o">)</span> constant returns <span class="o">(</span>string<span class="o">)</span>;
+    <span class="k">function </span>subscriptionStartedBlock<span class="o">(</span>int256 id<span class="o">)</span> constant returns <span class="o">(</span>int<span class="o">)</span>;
+    <span class="k">function </span>subscriptionExpiresDate<span class="o">(</span>int256 id<span class="o">)</span> constant returns <span class="o">(</span>string<span class="o">)</span>;
+    <span class="k">function </span>subscriptionExpiresBlock<span class="o">(</span>int256 id<span class="o">)</span> constant returns <span class="o">(</span>int<span class="o">)</span>;
+    <span class="k">function </span>subscriptionAddressActive<span class="o">(</span>address wallet<span class="o">)</span> constant returns <span class="o">(</span>bool<span class="o">)</span>;
+    <span class="k">function </span>orderPaid<span class="o">(</span>int256 id<span class="o">)</span> constant returns <span class="o">(</span>bool<span class="o">)</span>;
+    <span class="k">function </span>orderPaidBlock<span class="o">(</span>int256 id<span class="o">)</span> constant returns <span class="o">(</span>int<span class="o">)</span>;
+    <span class="k">function </span>approvedSender<span class="o">()</span> constant returns <span class="o">(</span>address<span class="o">)</span>;
+<span class="o">}</span>
+
+
+contract Example <span class="o">{</span>
+
+    EthereumPOS public pos;
+    address public owner;
+
+    mapping<span class="o">(</span>int256 <span class="o">=</span>&gt; bool<span class="o">)</span> isPaid;
+    mapping<span class="o">(</span>address <span class="o">=</span>&gt; bool<span class="o">)</span> allowedUsers;
+
+    <span class="k">function </span>Example<span class="o">()</span> <span class="o">{</span>
+        pos <span class="o">=</span> EthereumPOS<span class="o">(</span>0x0000000000000000000000000000000000000<span class="o">)</span>;
+        owner <span class="o">=</span> msg.sender;
+    <span class="o">}</span>
+
+    // EtheruemPOS.com subscription callback request
+    <span class="k">function </span>callbackSubscription<span class="o">(</span>uint256 id, string ref_id, address ref_address, bool active<span class="o">)</span> <span class="o">{</span>
+        require<span class="o">(</span>msg.sender <span class="o">==</span> pos.approvedSender<span class="o">())</span>;
+        allowedUsers[ref_address] <span class="o">=</span> active;
+        isPaid[ref_address] <span class="o">==</span> active
+    <span class="o">}</span>
+
+    <span class="k">function </span>testSubscription<span class="o">()</span> external payable <span class="o">{</span>
+       require<span class="o">(</span>pos.subscriptionAddressActive<span class="o">(</span>msg.sender<span class="o">))</span>;
+       owner.transfer<span class="o">(</span>msg.value<span class="o">)</span>;
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre>
+<p>This is a full example of using Ethereum POS smart contract to run functions inside of another contract.</p>
+
+<h3 id="synopsis">Synopsis</h3>
+
+<p>Imagine you have your own smart contract that holds user subscriptions, each user that wants to 
+interact with your contract must pay your monthly fee. </p>
+
+<p>In this example, this contract would allow ETH to be transferred to a different address if the sending address 
+has a active subscription.</p>
+
+<h3 id="testsubscription-address-wallet-function">testSubscription(address wallet) Function</h3>
+
+<p>This public function will force the sender to have a active subscription to continue. If the address has an 
+active subscription the sending ETH amount will be sent to the owner.</p>
 
 <h1 id="pricing-and-fees">Pricing and Fees</h1>
 
@@ -840,80 +1223,78 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
 <table><thead>
 <tr>
 <th>Plan</th>
-<th>Monthly Price</th>
-<th>Daily Transactions</th>
-<th>Max Amount (USD)</th>
+<th>Price</th>
+<th>Monthly Cost</th>
+<th>Max (ETH)</th>
 <th>Recurring Payments</th>
+<th>Contract Calls</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>Free</td>
-<td>$0.00</td>
-<td>10</td>
-<td>$10.00</td>
-<td>no</td>
-</tr>
-<tr>
 <td>Basic</td>
-<td>$5.00</td>
-<td>25</td>
-<td>$30.00</td>
+<td>$0.25 per order</td>
+<td>$0.00</td>
+<td>0.25 ETH</td>
+<td>yes</td>
 <td>no</td>
 </tr>
 <tr>
 <td>Seller</td>
-<td>$12.00</td>
-<td>50</td>
-<td>$100.00</td>
+<td>$0.15 per order</td>
+<td>$6.00</td>
+<td>2 ETH</td>
 <td>yes</td>
+<td>no</td>
 </tr>
 <tr>
 <td>Premium</td>
-<td>$20.00</td>
-<td>150</td>
-<td>$500.00</td>
+<td>$0.10 per order</td>
+<td>$25.00</td>
+<td>10 ETH</td>
+<td>yes</td>
 <td>yes</td>
 </tr>
 <tr>
 <td>Exclusive</td>
-<td>contact us</td>
-<td>500+</td>
-<td>$1000.00</td>
+<td>$0.00</td>
+<td>$50.00</td>
+<td>100 ETH</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Corporate</td>
+<td>Contact Us</td>
+<td>&mdash;</td>
+<td>100+ ETH</td>
+<td>yes</td>
 <td>yes</td>
 </tr>
 </tbody></table>
 
-<h3 id="plugin-features">Plugin Features</h3>
+<h3 id="smart-contract-features">Smart Contract Features</h3>
 
 <table><thead>
 <tr>
-<th>Plugin</th>
-<th>Monthly Price</th>
-<th>Max Amount</th>
+<th>Cost Per Call</th>
+<th>Gas Limit</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>TXT Messaging 150</td>
-<td>$5.00</td>
-<td>150</td>
+<td>$0.25</td>
+<td>80,000</td>
 </tr>
 <tr>
-<td>TXT Messaging 500</td>
-<td>$10.00</td>
-<td>500</td>
+<td>$0.50</td>
+<td>120,000</td>
 </tr>
 <tr>
-<td>Recurring Payments</td>
-<td>$10.00</td>
-<td>500</td>
+<td>$1.00</td>
+<td>250,000</td>
 </tr>
 </tbody></table>
 
-<h4 id="text-messaging">Text Messaging</h4>
-
-<p>This Ethereum POS plugin feature is great for applications that would like to text the user or developer of recent payment activity.</p>
-
-<h5 id="recurring-payments">Recurring Payments</h5>
+<h5 id="recurring-subscription-payments">Recurring Subscription Payments</h5>
 
 <p>Give your customers the ability to pay monthly with a dedicated QR code.</p>
 
@@ -940,6 +1321,10 @@ Ethereum POS does not take any Ethereum or gas during this transaction process.
 <li>Ethereum POS sends entire balance with order data to Ethereum POS contract.</li>
 <li>Merchant/Developer can hold funds inside of the contract and withdraw when requested. (sending a call to contract from requesting address)</li>
 </ol>
+
+<aside class="notice">
+Email us:  info@ethereumpos.com
+</aside>
 
           <h1 id="errors">Errors</h1>
 
