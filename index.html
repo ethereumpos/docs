@@ -233,7 +233,7 @@
       <div class="content">
         <h1 id="introduction">Introduction</h1>
 
-<p>Welcome to the Ethereum POS API! This documentation covers everything you need to know about accepting ethereum for your application. You&rsquo;ll be able to create orders, retrieve order information, and get your account history.</p>
+<p>Welcome to the Ethereum POS (Point of Sale) API Documentation! This documentation covers everything you need to know about accepting ethereum for your application. You&rsquo;ll be able to create orders, retrieve order information, and get your account history.</p>
 
 <p>Ethereum POS has a pretty basic transaction system.</p>
 
@@ -246,9 +246,17 @@
 <li>Another POST request to your application&rsquo;s callback URL.</li>
 </ol>
 
+<aside class="notice">
+BETA API - Please use the Testnet API Endpoint first.
+</aside>
+
 <p>We have language bindings in cURL, Golang, and in jQuery. You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
 
 <p>Ethereum POS is currently in the process of making the transaction callback process a seamless and transparent process. The plan is to have the customer pay directly to Ethereum POS Contract with data to include your Ethereum address, order ID and callback information. Once you&rsquo;ve collected your funds into your account inside of the contract, you&rsquo;ll be able to withdraw directly from contract, thus reducing the transaction fee each time a payment is transmitted.</p>
+
+<h2 id="api-endpoints">API Endpoints</h2>
+
+<p>Ethereum Point of Sale works on Ethereum&rsquo;s Mainnet (ETH) for production use. When you want to test your application, use the Testnet API that runs on the Ropsten Ethereum blockchain.</p>
 
 <h3 id="production-api-endpoint-ethereum-blockchain-eth">Production API Endpoint (Ethereum Blockchain ETH)</h3>
 
@@ -260,9 +268,9 @@
 
 <h1 id="authentication">Authentication</h1>
 
-<p>Ethereum POS uses API keys to allow access to the API. You can register a new Ethereum POS API key at our <a href="http://example.com/register">developer portal</a>.</p>
+<p>Ethereum POS uses API keys to allow access to the API. You can register a new API key by registering on <a href="https://ethereumpos.com">ethereumpos.com</a>.</p>
 
-<p>Ethereum POS expects for the API key to be included in all requests over $5.00 USD. API requests to the server in a header that looks like the following:</p>
+<p>API requests to the server as a HEADER will look like the following:</p>
 
 <p><code class="prettyprint">Authorization: MYKEYHERE</code></p>
 
@@ -270,7 +278,7 @@
 You must replace <code>MYKEYHERE</code> with your personal API key.
 </aside>
 
-<h1 id="orders-api">Orders API</h1>
+          <h1 id="orders-api">Orders API</h1>
 
 <h2 id="create-new-order">Create New Order</h2>
 <pre class="highlight shell tab-shell"><code>curl -X POST -H <span class="s2">"Authorization: MYAPIKEY"</span> -H <span class="s2">"Content-Type: application/json"</span> -d <span class="s1">'{
@@ -387,7 +395,18 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
   </span><span class="s2">"expired"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>This endpoint creates NEW ORDERS for your customers to send money to.</p>
+<p>This request will create a new order for your customer to send ETH to. Each new request creates a new ethereum wallet. 
+Once the order is paid in full and confirmed the ether is forwarded to your ethereum wallet address. 
+This address is set when you registered for ethereumpos.com and is available in your dashboard.</p>
+
+<h3 id="expiration">Expiration</h3>
+
+<p>If an order does not get paid within 50 blocks it will expire. An expiration is needed since ETH vs USD changes often. 
+Once an order is expired, the order cannot be paid to. Create a new order to update the pricing relative to ether.</p>
+
+<aside class="warning">
+Requires the API Key Authorization Header. Replace <code>MYKEYHERE</code> with your API key.
+</aside>
 
 <h3 id="http-request">HTTP Request</h3>
 
@@ -533,7 +552,8 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
   </span><span class="s2">"expired"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>This endpoint retrieves order information</p>
+<p>This API request will respond with the order information. 
+You can send this request if you need to update the stats of an order on your application. The request includes the same JSON structure as creating a new order.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
@@ -555,7 +575,7 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
 </tr>
 </tbody></table>
 
-<h1 id="subscriptions-api">Subscriptions API</h1>
+          <h1 id="subscriptions-api">Subscriptions API</h1>
 
 <h2 id="create-subscription">Create Subscription</h2>
 <pre class="highlight shell tab-shell"><code>curl -X POST -H <span class="s2">"Authorization: MYAPIKEY"</span> -d <span class="s1">'{
@@ -574,6 +594,10 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Create a Recurring Subscription for customers that are billed the same for each month/week/day/etc.</p>
+
+<aside class="warning">
+Requires the API Key Authorization Header. Replace <code>MYKEYHERE</code> with your API key.
+</aside>
 
 <h3 id="http-request">HTTP Request</h3>
 
@@ -601,17 +625,40 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
 <tr>
 <td>recurring</td>
 <td>true</td>
-<td>This subscription is due every ___ days.</td>
+<td>This subscription is due every interval - see format</td>
 </tr>
 </tbody></table>
 
-<ul>
-<li>recurring can be in format 14d, 1m, 2w format. (d=day, m=month, w=week)</li>
-</ul>
+<h3 id="recurring-format">Recurring Format</h3>
+
+<p>Recurring input is formatted in a simple method, put a number followed by a character to symbolize a interval. 
+(d=day, w=week, m=month, y=year)</p>
+
+<table><thead>
+<tr>
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>7d</td>
+<td>7 days</td>
+</tr>
+<tr>
+<td>3w</td>
+<td>3 weeks</td>
+</tr>
+<tr>
+<td>6m</td>
+<td>6 months</td>
+</tr>
+<tr>
+<td>1y</td>
+<td>1 year</td>
+</tr>
+</tbody></table>
 
 <h2 id="create-subscription-order">Create Subscription Order</h2>
-
-<p>This endpoint will create a new order for your subscription. </p>
 <pre class="highlight shell tab-shell"><code>curl -X POST -H <span class="s2">"Authorization: MYAPIKEY"</span> -d <span class="s1">'{
     "id": 34654567,
     "ref_id": "2312324",
@@ -641,6 +688,12 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
   </span><span class="s2">"subscription"</span><span class="p">:</span><span class="w"> </span><span class="mi">34654567</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
+<p>This endpoint will create a new order for your subscription. </p>
+
+<aside class="warning">
+Requires the API Key Authorization Header. Replace <code>MYKEYHERE</code> with your API key.
+</aside>
+
 <h3 id="http-request">HTTP Request</h3>
 
 <p><code class="prettyprint">POST https://api.ethereumpos.com/subscription/order</code></p>
@@ -702,7 +755,7 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
 </tr>
 </tbody></table>
 
-<h1 id="history-api">History API</h1>
+          <h1 id="history-api">History API</h1>
 
 <h2 id="show-all-orders">Show All Orders</h2>
 
@@ -810,7 +863,7 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>This endpoint retrieves order information</p>
+<p>This API request lets you view each order you have with EthereumPOS.com.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
@@ -920,7 +973,7 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>This endpoint retrieves order information</p>
+<p>This API request will respond back with an array of orders based on the order method status you requested.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
@@ -1046,7 +1099,7 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
   </span><span class="s2">"test"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>This endpoint retrieves information about the merchant/developer account.</p>
+<p>This API request responds useful information to help your application know what&rsquo;s going on with EthereumPOS.com API and blockchain status.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
@@ -1068,9 +1121,21 @@ You must replace <code>MYKEYHERE</code> with your personal API key.
 <td>test</td>
 <td>will be set to true if request is sent to test API.</td>
 </tr>
+<tr>
+<td>usd</td>
+<td>USD pricing of ETH</td>
+</tr>
+<tr>
+<td>eur</td>
+<td>EURO pricing of ETH</td>
+</tr>
+<tr>
+<td>gbp</td>
+<td>GBP pricing of ETH</td>
+</tr>
 </tbody></table>
 
-<h1 id="smart-contract-api">Smart Contract API</h1>
+          <h1 id="smart-contract-api">Smart Contract API</h1>
 
 <h2 id="introduction">Introduction</h2>
 <pre class="highlight shell tab-shell"><code>contract EthereumPOS <span class="o">{</span>
@@ -1212,11 +1277,13 @@ has a active subscription.</p>
 <p>This public function will force the sender to have a active subscription to continue. If the address has an 
 active subscription the sending ETH amount will be sent to the owner.</p>
 
-<h1 id="pricing-and-fees">Pricing and Fees</h1>
+          <h1 id="pricing-and-fees">Pricing and Fees</h1>
 
 <h2 id="memberships">Memberships</h2>
 
-<p>Ethereum POSing has simple the understand billing</p>
+<p>Ethereum Point of Sale is extremly low cost for the customer and the developer/merchant. 
+While you use Etheruem POS you can accept payments from any type of ETH wallet, even Coinbase. 
+All pricing is measured in USD but will be converted in ETH when an order is placed.</p>
 
 <h3 id="monthly-plans">Monthly Plans</h3>
 
@@ -1274,6 +1341,8 @@ active subscription the sending ETH amount will be sent to the owner.</p>
 
 <h3 id="smart-contract-features">Smart Contract Features</h3>
 
+<p>This fee includes all ETH transactions fees so you won&rsquo;t have to worry. Depending on how large your callback function is you can choose the gas limit.</p>
+
 <table><thead>
 <tr>
 <th>Cost Per Call</th>
@@ -1282,6 +1351,10 @@ active subscription the sending ETH amount will be sent to the owner.</p>
 </thead><tbody>
 <tr>
 <td>$0.25</td>
+<td>50,000</td>
+</tr>
+<tr>
+<td>$0.30</td>
 <td>80,000</td>
 </tr>
 <tr>
@@ -1298,10 +1371,6 @@ active subscription the sending ETH amount will be sent to the owner.</p>
 
 <p>Give your customers the ability to pay monthly with a dedicated QR code.</p>
 
-<h2 id="free-membership-limits">Free Membership Limits</h2>
-
-<p>Ethereum POS provides free transaction forwarding with amounts under $10.00.</p>
-
 <h2 id="ethereum-fees">Ethereum Fees</h2>
 
 <p>When the customer first submits the transaction, they will be forced to pay for the transaction fee which is around $0.02 USD. Once Ethereum POS has at least 12 confirmations on the customers transaction, the entire balance of the wallet will be sent to your Ethereum address that you inserted on the /new request.</p>
@@ -1312,7 +1381,7 @@ active subscription the sending ETH amount will be sent to the owner.</p>
 Ethereum POS does not take any Ethereum or gas during this transaction process.
 </aside>
 
-<h1 id="contract-information">Contract Information</h1>
+<h2 id="contract-information">Contract Information</h2>
 
 <p>Ethereum POS is currently in the process of making the transaction callback process a seamless and transparent process. The plan is to have the customer pay directly to Ethereum POS Contract with data to include your Ethereum address, order ID and callback information. Once you&rsquo;ve collected your funds into your account inside of the contract, you&rsquo;ll be able to withdraw directly from contract, thus reducing the transaction fee each time a payment is transmitted.</p>
 
@@ -1328,9 +1397,7 @@ Email us:  info@ethereumpos.com
 
           <h1 id="errors">Errors</h1>
 
-<aside class="notice">This error section is stored in a separate file in `includes/_errors.md`. Slate allows you to optionally separate out your docs into many files&hellip;just save them to the `includes` folder and add them to the top of your `index.md`&lsquo;s frontmatter. Files are included in the order listed.</aside>
-
-<p>The Kittn API uses the following error codes:</p>
+<p>Errors are no fun when you have to debug, but it&rsquo;s ok. Here&rsquo;s a list of the error codes.</p>
 
 <table><thead>
 <tr>
@@ -1339,48 +1406,44 @@ Email us:  info@ethereumpos.com
 </tr>
 </thead><tbody>
 <tr>
-<td>400</td>
-<td>Bad Request &ndash; Your request sucks</td>
+<td>1</td>
+<td>Invalid or Missing Authorization Header API Key</td>
 </tr>
 <tr>
-<td>401</td>
-<td>Unauthorized &ndash; Your API key is wrong</td>
+<td>2</td>
+<td>API issue - try later?</td>
 </tr>
 <tr>
-<td>403</td>
-<td>Forbidden &ndash; The kitten requested is hidden for administrators only</td>
+<td>3</td>
+<td>Invalid or Missing callback URL or ETH contract address</td>
 </tr>
 <tr>
-<td>404</td>
-<td>Not Found &ndash; The specified kitten could not be found</td>
+<td>4</td>
+<td>Order not found</td>
 </tr>
 <tr>
-<td>405</td>
-<td>Method Not Allowed &ndash; You tried to access a kitten with an invalid method</td>
+<td>5</td>
+<td>Subscription not found</td>
 </tr>
 <tr>
-<td>406</td>
-<td>Not Acceptable &ndash; You requested a format that isn&rsquo;t json</td>
+<td>6</td>
+<td>Subscription has an incorrect interval</td>
 </tr>
 <tr>
-<td>410</td>
-<td>Gone &ndash; The kitten requested has been removed from our servers</td>
+<td>7</td>
+<td>Missing required input parameters</td>
 </tr>
 <tr>
-<td>418</td>
-<td>I&rsquo;m a teapot</td>
+<td>8</td>
+<td>Incorrect currency value or ETH value</td>
 </tr>
 <tr>
-<td>429</td>
-<td>Too Many Requests &ndash; You&rsquo;re requesting too many kittens! Slow down!</td>
+<td>9</td>
+<td>History found no results</td>
 </tr>
 <tr>
-<td>500</td>
-<td>Internal Server Error &ndash; We had a problem with our server. Try again later.</td>
-</tr>
-<tr>
-<td>503</td>
-<td>Service Unavailable &ndash; We&rsquo;re temporarily offline for maintenance. Please try again later.</td>
+<td>10</td>
+<td>Currency pricing is incorrect</td>
 </tr>
 </tbody></table>
 
