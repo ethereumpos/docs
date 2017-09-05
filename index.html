@@ -235,16 +235,26 @@
 
 <p>Welcome to the Ethereum POS (Point of Sale) API Documentation! This documentation covers everything you need to know about accepting ethereum for your application. You&rsquo;ll be able to create orders, retrieve order information, and get your account history.</p>
 
+<h3 id="payment-processing-steps">Payment Processing Steps</h3>
+
 <p>Ethereum POS has a pretty basic transaction system.</p>
 
 <ol>
-<li>Application creates new order for customer</li>
-<li>Customer pays QR code Ethereum address</li>
-<li>Successful alert for customer letting them know they paid. (expires in 15 minutes)</li>
-<li>Application receives a POST to callback URL of order information and transaction ID.</li>
-<li>Ethereum POS waits for 12 confirmations then sends entire wallet balance to your Ethereum address.</li>
-<li>Another POST request to your application&rsquo;s callback URL.</li>
+<li><p>Your website or application sends a request to API for a specified USD value for their order.</p></li>
+<li><p>Your application shows a QR code for Ethereum Address and expected ETH value to send. </p></li>
+<li><p>The customer pays in ETH and the ordered is marked as &lsquo;paid&rsquo; and sends a callback to your website or ethereum smart contract confirming the order was paid.</p></li>
+<li><p>The ETH funds that were sent from customer gets transferred to the merchant/developer. $0.25 USD is sent to Ethereum POS.</p></li>
 </ol>
+
+<h3 id="example-of-transaction">Example of Transaction</h3>
+
+<p><a href="https://ropsten.etherscan.io/address/0xff64a0bd49de1dd49d310faca6e339601982a945">Order Wallet</a></p>
+
+<p><a href="https://ropsten.etherscan.io/tx/0x9b0ef0428bbde40924d728d487ddb41e9ea14a3fc62ab550f747fb1c8717750e">Customer Payment</a></p>
+
+<p><a href="https://ropsten.etherscan.io/tx/0xe1e7a1a32c88dfb2869a9856401c3d319322d37872f678d4e57a852c5d116cbd">Payment to Merchant</a></p>
+
+<p><a href="https://ropsten.etherscan.io/tx/0x1442c843425950c5a0e31df23da520a8103312314a9c71edaebfcb20081a9bc3">Ethereum POS Payment</a></p>
 
 <aside class="notice">
 BETA API - Please use the Testnet API Endpoint first.
@@ -429,7 +439,7 @@ Requires the API Key Authorization Header. Replace <code>MYKEYHERE</code> with y
 <tr>
 <td>callback</td>
 <td>false</td>
-<td>Callback URL for your application for this order.</td>
+<td>Callback URL or Ethereum Smart Contract address</td>
 </tr>
 <tr>
 <td>ref_id</td>
@@ -452,6 +462,11 @@ Requires the API Key Authorization Header. Replace <code>MYKEYHERE</code> with y
 <td>The item image to display to user (optional)</td>
 </tr>
 </tbody></table>
+
+<h3 id="using-smart-contract-for-callback">Using Smart Contract for Callback</h3>
+
+<p>Rather than using a HTTP callback, you can use an ethereum contract address and Ethereum POS 
+will do the callback() function on your contract with order information. </p>
 
 <h2 id="get-order-information">Get Order Information</h2>
 <pre class="highlight shell tab-shell"><code>curl -X GET <span class="s2">"https://api.ethereumpos.com/order/&lt;ID&gt;"</span>
@@ -1204,13 +1219,7 @@ within the blockchain within your own environment.</p>
 <blockquote>
 <p>Insert the Ethereum POS Contract API into your contract</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code><span class="k">function </span>callbackOrder<span class="o">(</span>uint256 id, string ref_id, bool paid<span class="o">)</span> <span class="o">{</span>
-    require<span class="o">(</span>msg.sender <span class="o">==</span> EthereumPOS.approvedSender<span class="o">())</span>;
-    // run your functions here
-
-<span class="o">}</span>
-
-<span class="k">function </span>callbackSubscription<span class="o">(</span>uint256 id, string ref_id, address ref_address, bool active<span class="o">)</span> <span class="o">{</span>
+<pre class="highlight shell tab-shell"><code><span class="k">function </span>callback<span class="o">(</span>int256 id, string ref_id, int256 amount, address from<span class="o">)</span> <span class="o">{</span>
     require<span class="o">(</span>msg.sender <span class="o">==</span> EthereumPOS.approvedSender<span class="o">())</span>;
     // run your functions here
 

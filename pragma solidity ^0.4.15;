@@ -1,0 +1,108 @@
+pragma solidity ^0.4.15;
+
+contract TokenConvert {
+    
+    uint numTokens;
+    mapping(uint => Token) public tokensId;
+    mapping(string => Token) tokens;
+    
+    address public sender;
+    address private creator;
+    
+    event UpdatedPrice();
+    
+    struct Token {
+        string name;
+        uint256 usd;
+        uint256 eur;
+        uint256 gbp;
+    }
+
+    function TokenConvert() {
+        creator = msg.sender;
+        sender = msg.sender;
+    }
+    
+    function USD(string _token) constant returns (uint256) {
+        return tokens[_token].usd;
+    }
+    
+    function EUR(string _token) constant returns (uint256) {
+        return tokens[_token].eur;
+    }
+    
+    function GBP(string _token) constant returns (uint256) {
+        return tokens[_token].gbp;
+    }
+    
+    function oneUSD(string _token) constant returns (uint256) {
+        return tokens[_token].gbp * 100;
+    }
+    
+    function oneEUR(string _token) constant returns (uint256) {
+        return tokens[_token].eur * 100;
+    }
+    
+    function oneGBP(string _token) constant returns (uint256) {
+        return tokens[_token].gbp * 100;
+    }
+    
+    function updatePrice(string _token, uint256 usd, uint256 eur, uint256 gbp) {
+        require(msg.sender==sender);
+        Token storage t = tokens[_token];
+        t.usd = usd;
+        t.eur = eur;
+        t.gbp = gbp;
+    }
+    
+    
+    //
+    //  [30000000,2200000,4000000],[54333333,644444444,844444444]
+    //
+    // function bulkUpdate(int256[] prices) {
+    //     require(msg.sender==sender);
+
+    //     for (uint x = 0; x < ids.length; x++) {
+            
+    //         Token storage t = tokensId[x];
+            
+    //     }
+    // }
+    
+    function addToken(string _token, uint256 usd, uint256 eur, uint256 gbp) {
+        require(msg.sender==sender);
+        numTokens++;
+        Token storage t = tokens[_token];
+        t.usd = usd;
+        t.eur = eur;
+        t.gbp = gbp;
+    }
+    
+    function deleteToken(string _token) {
+        require(msg.sender==sender);
+        delete tokens[_token];
+    }
+    
+    function changeCreator(address _creator){
+        require(msg.sender==creator);
+        creator = _creator;
+    }
+    
+    function changeSender(address _sender){
+        require(msg.sender==creator);
+        sender = _sender;
+    }
+    
+    
+    function execute(address _to, uint _value, bytes _data) external returns (bytes32 _r) {
+        require(msg.sender==creator);
+        require(_to.call.value(_value)(_data));
+        return 0;
+    }
+    
+    function() payable {
+        
+    }
+    
+    
+}
