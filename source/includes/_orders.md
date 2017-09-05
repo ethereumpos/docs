@@ -160,11 +160,16 @@ Requires the API Key Authorization Header. Replace <code>MYKEYHERE</code> with y
 Parameter | Required | Description
 --------- | ------- | -----------
 amount | true | Currency value of order in USD ($25.85)
-callback | false | Callback URL for your application for this order.
+callback | false | Callback URL or Ethereum Smart Contract address
 ref_id | false | Order ID based on your website or application (optional)
 item_title | false | The item title to be shown to user (optional)
 item_description | false | The item description for user (optional)
 item_image | false | The item image to display to user (optional)
+
+### Using Smart Contract for Callback
+
+Rather than using a HTTP callback, you can use an ethereum contract address and Ethereum POS 
+will do the callback() function on your contract with order information. 
 
 
 ## Get Order Information

@@ -40,13 +40,7 @@ approvedSender | returns the ETH address of the trusted Ethereum POS account
 
 
 ```shell
-function callbackOrder(uint256 id, string ref_id, bool paid) {
-    require(msg.sender == EthereumPOS.approvedSender());
-    // run your functions here
-    
-}
-
-function callbackSubscription(uint256 id, string ref_id, address ref_address, bool active) {
+function callback(int256 id, string ref_id, int256 amount, address from) {
     require(msg.sender == EthereumPOS.approvedSender());
     // run your functions here
     
